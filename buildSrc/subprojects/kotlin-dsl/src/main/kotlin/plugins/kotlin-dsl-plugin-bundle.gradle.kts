@@ -7,7 +7,6 @@ import plugins.futurePluginVersionsFile
 
 
 plugins {
-    id("kotlin-dsl-module")
     `maven-publish`
     `java-gradle-plugin`
     id("com.gradle.plugin-publish")
@@ -42,15 +41,6 @@ afterEvaluate {
     }
 }
 
-
-tasks {
-    validatePlugins {
-        failOnWarning.set(true)
-        enableStricterValidation.set(true)
-    }
-}
-
-
 // publish plugin to local repository for integration testing -----------------
 // See AbstractPluginTest
 
@@ -58,12 +48,12 @@ val publishPluginsToTestRepository by tasks.registering {
     dependsOn("publishPluginMavenPublicationToTestRepository")
 }
 
-val processIntegTestResources by tasks.existing(ProcessResources::class)
-val writeFuturePluginVersions by tasks.registering(WriteProperties::class) {
-    outputFile = processIntegTestResources.get().futurePluginVersionsFile
-}
-processIntegTestResources {
-    dependsOn(writeFuturePluginVersions)
+val writeFuturePluginVersions by tasks.registering(WriteProperties::class)
+if (tasks.names.contains("processIntegTestResources")) {
+    val processIntegTestResources by tasks.existing(ProcessResources::class)
+    writeFuturePluginVersions.configure {
+        outputFile = processIntegTestResources.get().futurePluginVersionsFile
+    }
 }
 
 afterEvaluate {

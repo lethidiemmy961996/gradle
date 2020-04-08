@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import org.gradle.gradlebuild.unittestandcompile.ModuleType
-
-import java.util.concurrent.TimeUnit
+plugins {
+    id 'gradlebuild.internal.java'
+}
 
 apply from: 'templates.gradle'
 
@@ -39,8 +38,4 @@ dependencies {
 
 configurations.partialDistribution {
     exclude(group: "org.gradle.profiler", module: "gradle-profiler")
-}
-
-gradlebuildJava {
-    moduleType = ModuleType.INTERNAL
 }

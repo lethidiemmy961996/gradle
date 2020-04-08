@@ -1,9 +1,8 @@
 import org.gradle.gradlebuild.test.integrationtests.IntegrationTest
 import org.gradle.gradlebuild.testing.integrationtests.cleanup.WhenNotEmpty
-import org.gradle.gradlebuild.unittestandcompile.ModuleType
 
 plugins {
-    `java-library`
+    gradlebuild.internal.java
     gradlebuild.classycle
 }
 
@@ -27,10 +26,6 @@ dependencies {
     }
     integTestImplementation(testFixtures(project(":core")))
 
-}
-
-gradlebuildJava {
-    moduleType = ModuleType.INTERNAL
 }
 
 val integTestTasks: DomainObjectCollection<IntegrationTest> by extra

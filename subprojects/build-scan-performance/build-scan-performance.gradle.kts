@@ -1,4 +1,3 @@
-import org.gradle.gradlebuild.unittestandcompile.ModuleType
 import org.gradle.testing.PerformanceTest
 import org.gradle.testing.performance.generator.tasks.JvmProjectGeneratorTask
 
@@ -18,7 +17,7 @@ import org.gradle.testing.performance.generator.tasks.JvmProjectGeneratorTask
  * limitations under the License.
  */
 plugins {
-    `java-library`
+    gradlebuild.internal.java
     gradlebuild.classycle
 }
 
@@ -36,10 +35,6 @@ dependencies {
     testFixturesImplementation(project(":internalIntegTesting"))
 
     performanceTestImplementation(project(":internalIntegTesting"))
-}
-
-gradlebuildJava {
-    moduleType = ModuleType.INTERNAL
 }
 
 val generateTemplate = tasks.register<JvmProjectGeneratorTask>("javaProject") {

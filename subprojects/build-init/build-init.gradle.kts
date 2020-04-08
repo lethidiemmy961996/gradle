@@ -1,4 +1,3 @@
-import org.gradle.gradlebuild.unittestandcompile.ModuleType
 import org.gradle.util.VersionNumber
 import java.util.*
 
@@ -18,7 +17,7 @@ import java.util.*
  * limitations under the License.
  */
 plugins {
-    `java-library`
+    gradlebuild.distribution.`plugins-api-java`
     gradlebuild.classycle
 }
 
@@ -66,11 +65,6 @@ dependencies {
 
     testRuntimeOnly(project(":runtimeApiInfo"))
 }
-
-gradlebuildJava {
-    moduleType = ModuleType.CORE
-}
-
 
 tasks {
     register("updateInitPluginTemplateVersionFile") {

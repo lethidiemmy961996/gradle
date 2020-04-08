@@ -15,19 +15,14 @@
  */
 
 import org.gradle.gradlebuild.test.integrationtests.IntegrationTest
-import org.gradle.gradlebuild.unittestandcompile.ModuleType
 import plugins.futurePluginVersionsFile
 import org.gradle.gradlebuild.testing.integrationtests.cleanup.WhenNotEmpty
 
 plugins {
-    `kotlin-library`
+    gradlebuild.internal.kotlin
 }
 
 description = "Kotlin DSL Integration Tests"
-
-gradlebuildJava {
-    moduleType = ModuleType.INTERNAL
-}
 
 dependencies {
     testImplementation(project(":kotlinDslTestFixtures"))
