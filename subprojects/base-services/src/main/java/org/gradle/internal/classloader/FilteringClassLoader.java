@@ -16,6 +16,7 @@
 
 package org.gradle.internal.classloader;
 
+import com.google.common.collect.ImmutableList;
 import org.gradle.internal.util.Trie;
 
 import javax.annotation.Nonnull;
@@ -34,6 +35,13 @@ import java.util.Set;
  * packages and resources are visible.
  */
 public class FilteringClassLoader extends ClassLoader implements ClassLoaderHierarchy {
+    private static final List<String> PRE_FILTER = ImmutableList.of(
+        "java.",
+        "com.sun.",
+        "sun.",
+        "javax.",
+        "jdk."
+    );
     private static final ClassLoader EXT_CLASS_LOADER;
     private static final Set<String> SYSTEM_PACKAGES = new HashSet<String>();
     public static final String DEFAULT_PACKAGE = "DEFAULT";
@@ -87,12 +95,17 @@ public class FilteringClassLoader extends ClassLoader implements ClassLoaderHier
 
     @Override
     protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
-        try {
-            return EXT_CLASS_LOADER.loadClass(name);
-        } catch (ClassNotFoundException ignore) {
-            // ignore
+        for (String pkg : PRE_FILTER) {
+            if (name.startsWith(pkg)) {
+                try {
+                    return EXT_CLASS_LOADER.loadClass(name);
+                } catch (ClassNotFoundException ignore) {
+                    // ignore
+                }
+                break;
+            }
         }
-
+        
         if (!classAllowed(name)) {
             throw new FilteredClassException(name + " not found.");
         }
@@ -232,12 +245,12 @@ public class FilteringClassLoader extends ClassLoader implements ClassLoaderHier
          */
         public boolean isEmpty() {
             return classNames.isEmpty()
-                    && packageNames.isEmpty()
-                    && packagePrefixes.isEmpty()
-                    && resourcePrefixes.isEmpty()
-                    && resourceNames.isEmpty()
-                    && disallowedClassNames.isEmpty()
-                    && disallowedPackagePrefixes.isEmpty();
+                && packageNames.isEmpty()
+                && packagePrefixes.isEmpty()
+                && resourcePrefixes.isEmpty()
+                && resourceNames.isEmpty()
+                && disallowedClassNames.isEmpty()
+                && disallowedPackagePrefixes.isEmpty();
         }
 
         /**
